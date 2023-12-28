@@ -42,7 +42,7 @@ def main():
                 add_to_excel(ocr_result)
 
 def add_to_excel(ocr_result):
-    # Load existing Excel file
+    # Load existing Excel file or create a new one if it doesn't exist
     try:
         existing_df = pd.read_excel("ocr_result.xlsx")
     except FileNotFoundError:
@@ -68,5 +68,5 @@ def add_to_excel(ocr_result):
 
     st.success("OCR result added to Excel")
 
-if name == "main":
+if __name__ == "__main__":
     main()

@@ -2,8 +2,7 @@ import streamlit as st
 from PIL import Image
 import pytesseract
 import pandas as pd
-import io
-import base64
+import cv2
 
 # Path to the Tesseract executable
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
@@ -30,16 +29,29 @@ def main():
 
     elif method == "Use Webcam":
         st.warning("Please grant camera permissions to your browser for webcam access.")
-        camera_image = st.camera()
+
+        # Initialize webcam capture
+        cap = cv2.VideoCapture(0)
 
         if st.button("Capture Image"):
-            if camera_image is not None:
-                # Convert camera image to PIL Image
-                image = Image.open(io.BytesIO(base64.b64decode(camera_image)))
+            ret, frame = cap.read()
+
+            if ret:
+                # Convert OpenCV BGR format to RGB format
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+                # Convert captured frame to PIL Image
+                image = Image.fromarray(frame)
+                
+                # Display captured image
+                st.image(image, caption="Captured Image", use_column_width=True)
 
                 # Perform OCR on the captured image
                 ocr_result = perform_ocr(image)
                 add_to_excel(ocr_result)
+
+        # Release webcam
+        cap.release()
 
 def add_to_excel(ocr_result):
     # Load existing Excel file or create a new one if it doesn't exist

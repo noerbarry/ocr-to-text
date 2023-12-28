@@ -5,14 +5,14 @@ import pandas as pd
 import cv2
 
 # Path to the Tesseract executable
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = 'tesseract'
 
 def perform_ocr(image):
     ocr_result = pytesseract.image_to_string(image, lang='ind')
     return ocr_result
 
 def main():
-    st.title("OCR KTP Indonesia to Excel")
+    st.title("OCR to Excel")
 
     method = st.radio("Select Input Method:", ("Upload Image", "Use Webcam"))
 
